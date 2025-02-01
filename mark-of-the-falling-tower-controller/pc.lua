@@ -32,7 +32,7 @@ signals["mine-start"] = function(from, port, a1, a2, a3)
 
     local flag = true
     for addr in component.list("gt_machine") do
-      if component.proxy(addr).hasWork() then
+      if component.proxy(addr).isWorkAllowed() then
         flag = false
         break
       end
