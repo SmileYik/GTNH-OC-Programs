@@ -21,7 +21,7 @@ local function handleMessage()
   end
 end
 
-signals["mine-start"] = function(from, port, a1, a2, a3)
+signals["mine-start"] = function (from, port, a1, a2, a3)
   working = true
   for addr in component.list("gt_machine") do
     component.proxy(addr).setWorkAllowed(true)
@@ -32,7 +32,7 @@ signals["mine-start"] = function(from, port, a1, a2, a3)
 
     local flag = true
     for addr in component.list("gt_machine") do
-      if component.proxy(addr).isWorkAllowed() then
+      if component.proxy(addr).hasWork() then 
         flag = false
         break
       end
@@ -45,7 +45,7 @@ signals["mine-start"] = function(from, port, a1, a2, a3)
   end
 end
 
-signals["ack"] = function(from, port, a1, a2, a3)
+signals["ack"] = function (from, port, a1, a2, a3)
   working = false
 end
 
