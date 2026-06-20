@@ -20,8 +20,7 @@ local iItem = ic.getStackInInternalSlot
 c = computer
 local cTime, cSignal = c.uptime, c.pullSignal
 
-local signals = {}
-local filler = {}
+local signals, filler = {}, {}
 local mineWorking, fillerWorking = false, false
 
 m.open(PORT) m.setWakeMessage(WEAKUP) m.broadcast(PORT, WEAKUP)
@@ -44,9 +43,7 @@ local function reset()
   for i = 1, r.inventorySize() do
     item = iItem(i)
     if item ~= nil and item.name == TARGET_NAME then
-      r.select(i) 
-      ic.equip()
-      break
+      r.select(i) ic.equip() break
     end
   end
 end
@@ -115,12 +112,12 @@ local function trySpawn()
   end
 end
 
-signals["mine-done"] = function (from, port, a1, a2, a3)
+signals["mine-done"] = function (from, port, ...)
   mineWorking = false
   m.send(from, port, "ack")
 end
 
-signals["filler-done"] = function (from, port, a1, a2, a3)
+signals["filler-done"] = function (from, port, ...)
   filler[from] = true
   local flag = true
   m.send(from, port, "ack")
@@ -129,7 +126,6 @@ signals["filler-done"] = function (from, port, a1, a2, a3)
   end
   if flag then fillerWorking = false end
 end
-
 signals["reply-discover"] = function (from, port, a1, a2, a3) filler[from] = false end
 
 local function main()
@@ -144,10 +140,8 @@ local function main()
       for _ in pairs(filler) do i = i + 1 end
       if i >= MAX_FILLER then flag = false return true end
     end)
-    if #filler > 0 then break end
+    if next(filler) ~= nil then break end
   end
-
   while true do color(COLOR_FREE) trySpawn() sleep(SLEEP) end
 end
-
 while true do pcall(main) end
