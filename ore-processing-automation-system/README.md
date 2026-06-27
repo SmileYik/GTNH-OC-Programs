@@ -35,6 +35,7 @@
       - [检查流体ID数量 (`check-fluid` / 简写 `CF`)](#检查流体id数量-check-fluid--简写-cf)
       - [打印信息 (`print` / 简写 `P`)](#打印信息-print--简写-p)
       - [执行自定义 Lua 脚本 (`eval-lua` / 简写 `L`)](#执行自定义-lua-脚本-eval-lua--简写-l)
+      - [清空未用ME接口输出槽 (`clear-me-interface` / 简写 `CMI`)](#清空未用me接口输出槽-clear-me-interface--简写-cmi)
 
 ## 🛠️ 系统核心架构
 
@@ -242,6 +243,12 @@ run-client.lua
 - `{L: print('abc')}`
 - *作用*：在终端中打印 `abc`.
 - *返回值*: 当 Lua 脚本附带返回值且返回值为 `boolean` 类型时, 这个返回值将作为这个单元的返回值; 否则若 Lua 脚本执行成功才返回 `true`, 执行失败返回 `false`.
+
+#### 清空未用ME接口输出槽 (`clear-me-interface` / 简写 `CMI`)
+
+- `{CMI: }`
+- *作用*：将未使用的ME接口输出槽标记为清除. 也就是说, 如果筛选出来的物品少于 9 个, 则会将其他的 ME 接口清除.
+- *返回值*: 始终返回 `true`.
 
 [OreEditorRepo]: https://github.com/SmileYik/GTNH-OC-Ore-Processing-Editor
 [OreEditor]: https://blog.smileyik.eu.org/oc/ore-editor/
