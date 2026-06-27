@@ -188,12 +188,15 @@ function worker.work()
                     worker.findSuit(me, ItemUtil.getItemFromId(id), rules, markItem)
                 end
             end
+
             -- logical rule
+            local logicalCache = nil
             LogicalExectors.setComponent(LogicalExectors.COMPONENT_NAME.ME, me)
             for _, rule in ipairs(rules.logicals) do
                 ---@type boolean, LogicalCache
                 local result, cache = LogicalRule.eval(rule, LogicalExectors.exector)
                 if result then
+                    logicalCache = cache
                     for _, marked in ipairs(cache.markedItems or {}) do
                         worker.findSuit(me, marked, rules, markItem)
                     end
@@ -207,6 +210,7 @@ function worker.work()
                 local b = q.size or 0
                 return b < a
             end)
+
             for i, item in ipairs(items) do
                 if i > 9 then break end
                 worker.setInterface(component.database, me, i, {
@@ -215,6 +219,13 @@ function worker.work()
                     damage = item.damage
                 })
                 workResult = true
+            end
+
+            -- clear interface configuration
+            if logicalCache and logicalCache.clearMeInterface == true then
+                for i = #items, 9 do
+                    me.setInterfaceConfiguration(i)
+                end
             end
         end
     end

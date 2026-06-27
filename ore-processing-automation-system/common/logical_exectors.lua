@@ -3,6 +3,7 @@ local ItemUtil = require("common.item_util")
 ---@class LogicalCache
 ---@field markedItems table<table>
 ---@field fluids table<string,number>
+---@field clearMeInterface boolean
 local LogicalCache = {}
 
 ---@class LogicalExectors
@@ -177,6 +178,16 @@ exectors["eval-lua"] = function (args, cache)
     return true
 end
 exectors["L"] = exectors["eval-lua"]
+
+---clear not used me interface pattern
+---@param args string ...
+---@param cache LogicalCache
+---@return boolean
+exectors["clear-me-interface"] = function (args, cache)
+    cache.clearMeInterface = true
+    return true
+end
+exectors["CMI"] = exectors["clear-me-interface"]
 
 local function defaultExector(...) return false end
 
